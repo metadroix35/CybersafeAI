@@ -14,7 +14,213 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      incidents: {
+        Row: {
+          assignee: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          incident_id: string
+          resolved_at: string | null
+          severity: Database["public"]["Enums"]["threat_severity"]
+          status: Database["public"]["Enums"]["incident_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assignee?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          incident_id: string
+          resolved_at?: string | null
+          severity?: Database["public"]["Enums"]["threat_severity"]
+          status?: Database["public"]["Enums"]["incident_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assignee?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          incident_id?: string
+          resolved_at?: string | null
+          severity?: Database["public"]["Enums"]["threat_severity"]
+          status?: Database["public"]["Enums"]["incident_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      monitored_assets: {
+        Row: {
+          asset_name: string
+          asset_type: string
+          created_at: string
+          hostname: string | null
+          id: string
+          ip_address: unknown | null
+          last_seen: string | null
+          operating_system: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          asset_name: string
+          asset_type: string
+          created_at?: string
+          hostname?: string | null
+          id?: string
+          ip_address?: unknown | null
+          last_seen?: string | null
+          operating_system?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          asset_name?: string
+          asset_type?: string
+          created_at?: string
+          hostname?: string | null
+          id?: string
+          ip_address?: unknown | null
+          last_seen?: string | null
+          operating_system?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      network_logs: {
+        Row: {
+          bytes_transferred: number | null
+          created_at: string
+          destination_ip: unknown
+          destination_port: number | null
+          flags: string[] | null
+          id: string
+          packet_count: number | null
+          protocol: string | null
+          source_ip: unknown
+          source_port: number | null
+          threat_detected: boolean | null
+          timestamp: string
+        }
+        Insert: {
+          bytes_transferred?: number | null
+          created_at?: string
+          destination_ip: unknown
+          destination_port?: number | null
+          flags?: string[] | null
+          id?: string
+          packet_count?: number | null
+          protocol?: string | null
+          source_ip: unknown
+          source_port?: number | null
+          threat_detected?: boolean | null
+          timestamp?: string
+        }
+        Update: {
+          bytes_transferred?: number | null
+          created_at?: string
+          destination_ip?: unknown
+          destination_port?: number | null
+          flags?: string[] | null
+          id?: string
+          packet_count?: number | null
+          protocol?: string | null
+          source_ip?: unknown
+          source_port?: number | null
+          threat_detected?: boolean | null
+          timestamp?: string
+        }
+        Relationships: []
+      }
+      security_metrics: {
+        Row: {
+          created_at: string
+          id: string
+          measurement_time: string
+          metric_change: number | null
+          metric_name: string
+          metric_value: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          measurement_time?: string
+          metric_change?: number | null
+          metric_name: string
+          metric_value: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          measurement_time?: string
+          metric_change?: number | null
+          metric_name?: string
+          metric_value?: number
+        }
+        Relationships: []
+      }
+      threats: {
+        Row: {
+          confidence_score: number | null
+          created_at: string
+          description: string
+          detection_method: string | null
+          id: string
+          raw_data: Json | null
+          resolved_at: string | null
+          severity: Database["public"]["Enums"]["threat_severity"]
+          source_host: string | null
+          source_ip: unknown | null
+          status: Database["public"]["Enums"]["threat_status"]
+          target_host: string | null
+          target_ip: unknown | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string
+          description: string
+          detection_method?: string | null
+          id?: string
+          raw_data?: Json | null
+          resolved_at?: string | null
+          severity?: Database["public"]["Enums"]["threat_severity"]
+          source_host?: string | null
+          source_ip?: unknown | null
+          status?: Database["public"]["Enums"]["threat_status"]
+          target_host?: string | null
+          target_ip?: unknown | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string
+          description?: string
+          detection_method?: string | null
+          id?: string
+          raw_data?: Json | null
+          resolved_at?: string | null
+          severity?: Database["public"]["Enums"]["threat_severity"]
+          source_host?: string | null
+          source_ip?: unknown | null
+          status?: Database["public"]["Enums"]["threat_status"]
+          target_host?: string | null
+          target_ip?: unknown | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +229,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      incident_status:
+        | "open"
+        | "investigating"
+        | "in-progress"
+        | "resolved"
+        | "closed"
+      threat_severity: "low" | "medium" | "high" | "critical"
+      threat_status: "active" | "investigating" | "resolved" | "false_positive"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +363,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      incident_status: [
+        "open",
+        "investigating",
+        "in-progress",
+        "resolved",
+        "closed",
+      ],
+      threat_severity: ["low", "medium", "high", "critical"],
+      threat_status: ["active", "investigating", "resolved", "false_positive"],
+    },
   },
 } as const
