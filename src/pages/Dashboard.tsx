@@ -1,4 +1,4 @@
-import { Shield, AlertTriangle, Activity, Eye, FileText, Users, Loader2 } from "lucide-react";
+import { Shield, AlertTriangle, Activity, Eye, FileText, Users, Loader2, LogOut } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -6,9 +6,54 @@ import { ThreatAlerts } from "@/components/dashboard/ThreatAlerts";
 import { SecurityMetrics } from "@/components/dashboard/SecurityMetrics";
 import { RecentIncidents } from "@/components/dashboard/RecentIncidents";
 import { useDashboardMetrics } from "@/hooks/useDashboardData";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const Dashboard = () => {
   const { data: metrics, isLoading: metricsLoading } = useDashboardMetrics();
+  const { user, loading: authLoading, signOut } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  // Redirect to auth if not authenticated
+  useEffect(() => {
+    if (!authLoading && !user) {
+      navigate('/auth');
+    }
+  }, [user, authLoading, navigate]);
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error signing out",
+        description: error.message,
+      });
+    } else {
+      toast({
+        title: "Signed out successfully",
+        description: "You have been logged out of the system.",
+      });
+      navigate('/auth');
+    }
+  };
+
+  // Show loading while checking auth
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-cyber-primary" />
+      </div>
+    );
+  }
+
+  // Don't render dashboard if not authenticated
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -20,11 +65,20 @@ const Dashboard = () => {
             <p className="text-muted-foreground">Real-time cybersecurity monitoring and threat analysis</p>
           </div>
           <div className="flex items-center gap-3">
+            <div className="text-sm text-muted-foreground">
+              Welcome, {user.email}
+            </div>
             <Badge variant="outline" className="bg-cyber-success/10 text-cyber-success border-cyber-success">
               <Shield className="w-3 h-3 mr-1" />
               System Protected
             </Badge>
-            <Button>Generate Report</Button>
+            <Button variant="outline" onClick={() => navigate('/admin')}>
+              Admin Panel
+            </Button>
+            <Button variant="outline" onClick={handleSignOut}>
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </Button>
           </div>
         </div>
 
