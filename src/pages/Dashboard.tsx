@@ -1,12 +1,15 @@
-import { Shield, AlertTriangle, Activity, Eye, FileText, Users } from "lucide-react";
+import { Shield, AlertTriangle, Activity, Eye, FileText, Users, Loader2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ThreatAlerts } from "@/components/dashboard/ThreatAlerts";
 import { SecurityMetrics } from "@/components/dashboard/SecurityMetrics";
 import { RecentIncidents } from "@/components/dashboard/RecentIncidents";
+import { useDashboardMetrics } from "@/hooks/useDashboardData";
 
 const Dashboard = () => {
+  const { data: metrics, isLoading: metricsLoading } = useDashboardMetrics();
+
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -33,8 +36,14 @@ const Dashboard = () => {
               <AlertTriangle className="h-4 w-4 text-cyber-danger" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-cyber-danger">23</div>
-              <p className="text-xs text-muted-foreground">+2 from last hour</p>
+              {metricsLoading ? (
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              ) : (
+                <>
+                  <div className="text-2xl font-bold text-cyber-danger">{metrics?.activeThreats || 0}</div>
+                  <p className="text-xs text-muted-foreground">Active security threats</p>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -44,8 +53,14 @@ const Dashboard = () => {
               <Activity className="h-4 w-4 text-cyber-secondary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-cyber-secondary">1,247</div>
-              <p className="text-xs text-muted-foreground">Events in last hour</p>
+              {metricsLoading ? (
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              ) : (
+                <>
+                  <div className="text-2xl font-bold text-cyber-secondary">{metrics?.networkEvents?.toLocaleString() || 0}</div>
+                  <p className="text-xs text-muted-foreground">Events in last hour</p>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -55,19 +70,31 @@ const Dashboard = () => {
               <Eye className="h-4 w-4 text-cyber-success" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-cyber-success">89</div>
-              <p className="text-xs text-muted-foreground">All systems online</p>
+              {metricsLoading ? (
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              ) : (
+                <>
+                  <div className="text-2xl font-bold text-cyber-success">{metrics?.monitoredAssets || 0}</div>
+                  <p className="text-xs text-muted-foreground">Assets online</p>
+                </>
+              )}
             </CardContent>
           </Card>
 
           <Card className="bg-cyber-surface border-cyber-surface-variant">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Reports Generated</CardTitle>
+              <CardTitle className="text-sm font-medium">Monthly Incidents</CardTitle>
               <FileText className="h-4 w-4 text-cyber-warning" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-cyber-warning">156</div>
-              <p className="text-xs text-muted-foreground">This month</p>
+              {metricsLoading ? (
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              ) : (
+                <>
+                  <div className="text-2xl font-bold text-cyber-warning">{metrics?.monthlyIncidents || 0}</div>
+                  <p className="text-xs text-muted-foreground">This month</p>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>

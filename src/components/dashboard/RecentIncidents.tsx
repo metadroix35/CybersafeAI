@@ -1,46 +1,9 @@
-import { Clock, CheckCircle, AlertCircle, XCircle } from "lucide-react";
+import { Clock, CheckCircle, AlertCircle, XCircle, Loader2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
-const incidents = [
-  {
-    id: "INC-2024-0012",
-    title: "Phishing Email Campaign Detected",
-    status: "resolved",
-    severity: "medium",
-    assignee: "Sarah Connor",
-    created: "2024-01-15 14:30",
-    resolved: "2024-01-15 16:45",
-  },
-  {
-    id: "INC-2024-0011",
-    title: "Suspicious Network Traffic from External IP",
-    status: "investigating",
-    severity: "high",
-    assignee: "John Matrix",
-    created: "2024-01-15 12:15",
-    resolved: null,
-  },
-  {
-    id: "INC-2024-0010",
-    title: "Failed Authentication Attempts",
-    status: "resolved",
-    severity: "low",
-    assignee: "Kyle Reese",
-    created: "2024-01-15 09:20",
-    resolved: "2024-01-15 10:30",
-  },
-  {
-    id: "INC-2024-0009",
-    title: "Malware Signature Update Required",
-    status: "in-progress",
-    severity: "medium",
-    assignee: "Sarah Connor",
-    created: "2024-01-14 16:45",
-    resolved: null,
-  },
-];
+import { useIncidents } from "@/hooks/useDashboardData";
+import { formatDistanceToNow, format } from "date-fns";
 
 const getStatusIcon = (status: string) => {
   switch (status) {
@@ -82,6 +45,8 @@ const getSeverityColor = (severity: string) => {
 };
 
 export const RecentIncidents = () => {
+  const { data: incidents, isLoading, error } = useIncidents();
+
   return (
     <Card className="bg-cyber-surface border-cyber-surface-variant">
       <CardHeader>
@@ -102,44 +67,60 @@ export const RecentIncidents = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {incidents.map((incident) => (
-            <div
-              key={incident.id}
-              className="flex items-center justify-between p-4 rounded-lg bg-cyber-surface-variant border border-border"
-            >
-              <div className="flex items-center gap-4 flex-1">
-                <div className="flex items-center gap-2">
-                  {getStatusIcon(incident.status)}
-                  <span className="text-xs font-mono text-muted-foreground">
-                    {incident.id}
-                  </span>
-                </div>
-                <div className="flex-1">
-                  <h4 className="text-sm font-semibold text-foreground">
-                    {incident.title}
-                  </h4>
-                  <p className="text-xs text-muted-foreground">
-                    Assigned to {incident.assignee} • Created {incident.created}
-                    {incident.resolved && ` • Resolved ${incident.resolved}`}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <Badge
-                  variant="outline"
-                  className={getSeverityColor(incident.severity)}
-                >
-                  {incident.severity.toUpperCase()}
-                </Badge>
-                <Badge
-                  variant="outline"
-                  className={getStatusColor(incident.status)}
-                >
-                  {incident.status.replace("-", " ").toUpperCase()}
-                </Badge>
-              </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
             </div>
-          ))}
+          ) : error ? (
+            <div className="text-center py-8 text-muted-foreground">
+              Error loading incidents
+            </div>
+          ) : !incidents || incidents.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              No recent incidents found
+            </div>
+          ) : (
+            incidents.map((incident) => (
+              <div
+                key={incident.id}
+                className="flex items-center justify-between p-4 rounded-lg bg-cyber-surface-variant border border-border"
+              >
+                <div className="flex items-center gap-4 flex-1">
+                  <div className="flex items-center gap-2">
+                    {getStatusIcon(incident.status)}
+                    <span className="text-xs font-mono text-muted-foreground">
+                      {incident.incident_id}
+                    </span>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-sm font-semibold text-foreground">
+                      {incident.title}
+                    </h4>
+                    <p className="text-xs text-muted-foreground">
+                      {incident.assignee && `Assigned to ${incident.assignee} • `}
+                      Created {format(new Date(incident.created_at), "MMM dd, HH:mm")}
+                      {incident.resolved_at && 
+                        ` • Resolved ${format(new Date(incident.resolved_at), "MMM dd, HH:mm")}`}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge
+                    variant="outline"
+                    className={getSeverityColor(incident.severity)}
+                  >
+                    {incident.severity.toUpperCase()}
+                  </Badge>
+                  <Badge
+                    variant="outline"
+                    className={getStatusColor(incident.status)}
+                  >
+                    {incident.status.replace("_", " ").toUpperCase()}
+                  </Badge>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </CardContent>
     </Card>
