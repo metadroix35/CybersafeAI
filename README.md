@@ -1,73 +1,97 @@
-# Welcome to your Lovable project
 
-## Project info
 
-**URL**: https://lovable.dev/projects/f63ed1e0-2090-4dec-bf12-44cf42e5a31d
 
-## How can I edit this code?
+# CybersafeAI  
 
-There are several ways of editing your application.
+This project is built using **Lovable** (lovable.dev) — changes through Lovable are automatically committed to this repo — and is a modern web application focused on cybersecurity and AI-driven features.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f63ed1e0-2090-4dec-bf12-44cf42e5a31d) and start prompting.
+##  Technologies & Tools
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Frontend**: React + TypeScript + Vite  
+- **Styling & UI**: Tailwind CSS, shadcn-ui  
+- **Platform**: Lovable (for in-browser editing and instant deployment)  
+- **Backend / API**: (If applicable, mention Node.js, Express, Supabase, or other services)  
+- **Deployment**: Changes can be edited live via Lovable and deployed instantly  
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+##  Getting Started
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+To run locally:
 
-Follow these steps:
+1. Clone the repository  
+   ```bash
+   git clone https://github.com/metadroix35/CybersafeAI.git
+   cd CybersafeAI
+  ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+2. Install dependencies
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+   ```bash
+   npm install
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+3. Run development server
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+   ```bash
+   npm run dev
+   ```
+
+Any changes made via Lovable will also update this repo automatically.
+
+---
+
+##  Project Structure
+
+```
+public/  
+src/  
+  ├─ components/  
+  ├─ pages/  
+  ├─ styles/  
+  ├─ hooks/  
+  └─ (other folders)  
+supabase/ (if using Supabase configuration)  
+.env  
+README.md  
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+##  Usage & Editing
 
-**Use GitHub Codespaces**
+* **Via Lovable**: Open the Lovable project link and make edits directly.
+* **Locally**: Use your favorite IDE, commit, and push — changes sync back to Lovable.
+* **Live Preview**: Lovable provides instant live preview while editing.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+##  Configuration
 
-This project is built with:
+If your project uses environment variables or external services (like Supabase, API keys), add them in `.env` or Supabase config files as needed.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+---
 
-## How can I deploy this project?
+##  License & Contribution
 
-Simply open [Lovable](https://lovable.dev/projects/f63ed1e0-2090-4dec-bf12-44cf42e5a31d) and click on Share -> Publish.
+Feel free to open issues or submit pull requests.
+This project is open source (include any license, e.g. MIT).
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+###  Notes & Credits
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+* Developed and maintained using **Lovable.dev**.
+* Designed to blend AI, cybersecurity features, and live editing capabilities.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+
+**Enjoy exploring CybersafeAI! **
+
+```
+
+If you like, I can also add **screenshots, live links, or usage examples** to this README so it looks more polished on GitHub. Want me to do that?
+::contentReference[oaicite:0]{index=0}
+```
